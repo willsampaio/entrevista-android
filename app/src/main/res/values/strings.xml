@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">entrevista-android</string>
+    <string name="tv_name">	Name:\u0020</string>
+    <string name="tv_height">Height:\u0020</string>
+    <string name="tv_mass">	Mass:\u0020</string>
+    <string name="tv_hair_color">Hair Color:\u0020</string>
+    <string name="tv_skin_color">Skin Color:\u0020</string>
+    <string name="tv_eye_color">Eye Color:\u0020</string>
+    <string name="tv_birth_year">Birth Year:\u0020</string>
+    <string name="tv_gender">Gender:\u0020</string>
+    <string name="tv_homeworld">Homeworld:\u0020</string>
+    <string name="tv_species">Species:\u0020</string>
 </resources>
