@@ -1,4 +1,4 @@
-package com.example.will.entrevista_android;
+package com.example.will.entrevista_android.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.example.will.entrevista_android.Classes.Personagem;
 import com.example.will.entrevista_android.Ferramentas.JsonPersonagem;
+import com.example.will.entrevista_android.R;
 
 import org.json.JSONException;
 
@@ -23,11 +24,11 @@ public class PersonagemActivity extends AppCompatActivity {
 
 
 
-        getObjects();
+        config();
 
         Personagem p = null;
         try {
-            p = JsonPersonagem.getPersonagemSimples("https://swapi.co/api/people/1/");
+            p = JsonPersonagem.getPersonagemCompleto("https://swapi.co/api/people/1/");
             mostrarDados(p);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -39,7 +40,7 @@ public class PersonagemActivity extends AppCompatActivity {
 
     }
 
-    private void getObjects(){
+    private void config(){
         tvName = findViewById(R.id.textViewName);
         tvHeight = findViewById(R.id.textViewHeight);
         tvMass = findViewById(R.id.textViewMass);
@@ -57,12 +58,12 @@ public class PersonagemActivity extends AppCompatActivity {
         tvHeight.setText(getResources().getString(R.string.tv_height) + p.getHeight());
         tvMass.setText(getResources().getString(R.string.tv_mass) + p.getMass());
         tvGender.setText(getResources().getString(R.string.tv_gender) + p.getGender());
-//        tvHairColor.setText(getResources().getString(R.string.tv_hair_color) + p.getHair_color());
-//        tvSkinColor.setText(getResources().getString(R.string.tv_skin_color) + p.getSkin_color());
-//        tvEyeColor.setText(getResources().getString(R.string.tv_eye_color) + p.getEye_color());
-//        tvBirthYear.setText(getResources().getString(R.string.tv_birth_year) + p.getBirth_year());
-//        tvHomeworld.setText(getResources().getString(R.string.tv_homeworld) + p.getHomeworld());
-//        tvSpecies.setText(getResources().getString(R.string.tv_species) + p.getSpeciesString());
+        tvHairColor.setText(getResources().getString(R.string.tv_hair_color) + p.getHair_color());
+        tvSkinColor.setText(getResources().getString(R.string.tv_skin_color) + p.getSkin_color());
+        tvEyeColor.setText(getResources().getString(R.string.tv_eye_color) + p.getEye_color());
+        tvBirthYear.setText(getResources().getString(R.string.tv_birth_year) + p.getBirth_year());
+        tvHomeworld.setText(getResources().getString(R.string.tv_homeworld) + p.getHomeworld());
+        tvSpecies.setText(getResources().getString(R.string.tv_species) + p.getSpeciesString());
     }
 
 

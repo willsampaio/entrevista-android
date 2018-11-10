@@ -27,6 +27,11 @@ public class JsonPersonagem {
         Personagem p = null;
 
         String json = new JsonDownload().execute(url).get();
+
+        if(json == null){
+            return null;
+        }
+
         JSONObject j = new JSONObject(json);
 
         p = new Personagem();
@@ -34,8 +39,8 @@ public class JsonPersonagem {
         int id = idFromUrl(url_);
         p.setId(id);
         p.setGender(j.getString("gender"));
-        p.setHeight(j.getInt("height"));
-        p.setMass(j.getInt("mass"));
+        p.setHeight(j.getString("height"));
+        p.setMass(j.getString("mass"));
         p.setName(j.getString("name"));
 
         return p;
@@ -55,8 +60,8 @@ public class JsonPersonagem {
         p.setEye_color(j.getString("eye_color"));
         p.setGender(j.getString("gender"));
         p.setHair_color(j.getString("hair_color"));
-        p.setHeight(j.getInt("height"));
-        p.setMass(j.getInt("mass"));
+        p.setHeight(j.getString("height"));
+        p.setMass(j.getString("mass"));
         p.setName(j.getString("name"));
         p.setSkin_color(j.getString("skin_color"));
         p.setHomeworld(j.getString("homeworld"));
@@ -86,10 +91,5 @@ public class JsonPersonagem {
         int id = Integer.parseInt(partes[partes.length -1]);
         return id;
     }
-
-//    private static String getHomeworld(String url) throws ExecutionException, InterruptedException {
-//        String json = new JsonDownload().execute(url).get();
-//       // String homeworld =
-//    }
 
 }
