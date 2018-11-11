@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.QuickContactBadge;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Classes.Personagem;
@@ -19,6 +20,7 @@ import com.example.will.entrevista_android.R;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class CarregarDadosActivity extends AppCompatActivity {
@@ -39,7 +41,8 @@ public class CarregarDadosActivity extends AppCompatActivity {
 
 //        pado.limparBanco();
 
-        if(pado.buscarPersonagens(0, 3) != null){
+        ArrayList<Personagem> al = pado.buscarPersonagens(0, 3);
+        if(al.size() > 0){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -69,12 +72,17 @@ public class CarregarDadosActivity extends AppCompatActivity {
 
         Thread t = new Thread(new Runnable() {
             public void run() {
-                double count = 1;
+                int count = 0, id = 0;
                 while (count < total) {
-                    count += 1;
                     Personagem p = null;
                     try {
-                        p = JsonPersonagem.getPersonagemSimples("https://swapi.co/api/people/" + count + "/");
+                        p = JsonPersonagem.getPersonagemSimples("https://swapi.co/api/people/" + id++ + "/");
+
+                        if(p != null) {
+                            pado.inserirPersonagem(p);
+                            count++;
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -83,17 +91,13 @@ public class CarregarDadosActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    if(p != null) {
-                        pado.inserirPersonagem(p);
-                    }
+                    int percent = (int) (((double)count / total) * 100);
 
-                    final int percent = (int) ((count / total) * 100);
-                    count++;
-
-                    final double finalCount = count;
+                    final int finalPercent = percent;
+                    final int finalCount = count;
                     handler.post(new Runnable() {
                         public void run() {
-                            progressBar.setProgress(percent);
+                            progressBar.setProgress(finalPercent);
 
                             if(finalCount == total){
                                 button.setVisibility(View.VISIBLE);

@@ -50,6 +50,11 @@ public class JsonPersonagem {
         Personagem p = null;
 
         String json = new JsonDownload().execute(url).get();
+
+        if(json == null){
+            return null;
+        }
+
         JSONObject j = new JSONObject(json);
 
         p = new Personagem();

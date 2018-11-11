@@ -22,34 +22,18 @@ public class PersonagemADO {
     }
 
     public void limparBanco(){
-        db.getBanco().execSQL("DROP TABLE IF EXISTS `especie`;");
-        db.getBanco().execSQL("DROP TABLE IF EXISTS `personagem`;");
+        db.getBanco().execSQL("DROP TABLE IF EXISTS especie;");
+        db.getBanco().execSQL("DROP TABLE IF EXISTS personagem;");
+        criarTabelaPersonagem();
+        criarTabelaEspecie();
     }
 
     public void criarTabelaPersonagem() {
-        db.getBanco().execSQL("CREATE TABLE IF NOT EXISTS `personagem` (\n" +
-                "\t`id`\tINTEGER NOT NULL UNIQUE,\n" +
-                "\t`name`\tTEXT NOT NULL,\n" +
-                "\t`height`\tTEXT NOT NULL,\n" +
-                "\t`mass`\tTEXT NOT NULL,\n" +
-                "\t`hair_color`\tTEXT NOT NULL,\n" +
-                "\t`skin_color`\tTEXT NOT NULL,\n" +
-                "\t`eye_color`\tTEXT NOT NULL,\n" +
-                "\t`birth_year`\tTEXT NOT NULL,\n" +
-                "\t`gender`\tTEXT NOT NULL,\n" +
-                "\t`homeworld`\tTEXT NOT NULL,\n" +
-                "\t`fav`\tTEXT NOT NULL,\n" +
-                "\tPRIMARY KEY(`id`)\n" +
-                ");");
+        db.getBanco().execSQL("CREATE TABLE IF NOT EXISTS personagem (id INTEGER NOT NULL UNIQUE,name TEXT,height TEXT,mass TEXT,hair_color TEXT,skin_color TEXT,eye_color TEXT,birth_year TEXT,gender TEXT,homeworld TEXT,fav TEXT,PRIMARY KEY(id));");
     }
 
     public void criarTabelaEspecie() {
-        db.getBanco().execSQL("CREATE TABLE IF NOT EXISTS `especie` (\n" +
-                "\t`id`\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
-                "\t`name`\tTEXT NOT NULL,\n" +
-                "\t`personagem`\tINTEGER NOT NULL,\n" +
-                "\tFOREIGN KEY(`personagem`) REFERENCES `personagem`(`id`)\n" +
-                ");");
+        db.getBanco().execSQL("CREATE TABLE IF NOT EXISTS especie ( id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name TEXT, personagem INTEGER, FOREIGN KEY(personagem) REFERENCES personagem(id));");
     }
 
     public void inserirPersonagem(Personagem p) {
@@ -58,9 +42,11 @@ public class PersonagemADO {
                     new String[]{p.getId() + "", p.getName(), p.getHeight(), p.getMass(), p.getHair_color(),
                             p.getSkin_color(), p.getEye_color(), p.getBirth_year(), p.getGender(), p.getHomeworld()});
 
-            for (String s : p.getSpecies()) {
-                db.getBanco().execSQL("INSERT INTO especie (name, personagem) VALUES (?, ?)",
-                        new String[]{s, p.getId() + ""});
+            if(p.getSpecies() != null) {
+                for (String s : p.getSpecies()) {
+                    db.getBanco().execSQL("INSERT INTO especie (name, personagem) VALUES (?, ?)",
+                            new String[]{s, p.getId() + ""});
+                }
             }
 
         } catch (Exception e) {
@@ -106,14 +92,14 @@ public class PersonagemADO {
         while (cursor != null) {
             personagem = new Personagem();
             personagem.setId(cursor.getInt(cursor.getColumnIndex("id")));
-            personagem.setBirth_year(cursor.getString(cursor.getColumnIndex("name")));
-            personagem.setEye_color(cursor.getString(cursor.getColumnIndex("height")));
-            personagem.setGender(cursor.getString(cursor.getColumnIndex("mass")));
+            personagem.setName(cursor.getString(cursor.getColumnIndex("name")));
+            personagem.setHeight(cursor.getString(cursor.getColumnIndex("height")));
+            personagem.setMass(cursor.getString(cursor.getColumnIndex("mass")));
             personagem.setHair_color(cursor.getString(cursor.getColumnIndex("hair_color")));
-            personagem.setHeight(cursor.getString(cursor.getColumnIndex("skin_color")));
-            personagem.setMass(cursor.getString(cursor.getColumnIndex("eye_color")));
-            personagem.setName(cursor.getString(cursor.getColumnIndex("birth_year")));
-            personagem.setSkin_color(cursor.getString(cursor.getColumnIndex("gender")));
+            personagem.setSkin_color(cursor.getString(cursor.getColumnIndex("skin_color")));
+            personagem.setEye_color(cursor.getString(cursor.getColumnIndex("eye_color")));
+            personagem.setBirth_year(cursor.getString(cursor.getColumnIndex("birth_year")));
+            personagem.setGender(cursor.getString(cursor.getColumnIndex("gender")));
             personagem.setHomeworld(cursor.getString(cursor.getColumnIndex("homeworld")));
             personagem.setFav(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("fav"))));
 
@@ -125,11 +111,11 @@ public class PersonagemADO {
         return listaPersonagem;
     }
 
-    public ArrayList<Personagem> buscarPersonagens(int menor_que, int maior_que) {
+    public ArrayList<Personagem> buscarPersonagens(int maior_que, int menor_que) {
         try {
 
-            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id < ? AND id > ? ORDER BY id;",
-                    new String[]{menor_que + "", maior_que + ""});
+            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? ORDER BY id;",
+                    new String[]{maior_que + "", menor_que + ""});
 
             listaPersonagem = getValuesPer(cursor);
         } catch (Exception e) {
@@ -153,7 +139,7 @@ public class PersonagemADO {
 
     private ArrayList<String> buscarEspecies(int id) {
         try {
-            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM especie WHERE personagem = ?;",
+            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM especie WHERE personagem = ? ORDER BY id;",
                     new String[]{id + ""});
 
             return getValuesEsp(cursor);
