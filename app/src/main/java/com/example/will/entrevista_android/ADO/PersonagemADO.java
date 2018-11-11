@@ -21,6 +21,11 @@ public class PersonagemADO {
         criarTabelaEspecie();
     }
 
+    public void limparBanco(){
+        db.getBanco().execSQL("DROP TABLE IF EXISTS `especie`;");
+        db.getBanco().execSQL("DROP TABLE IF EXISTS `personagem`;");
+    }
+
     public void criarTabelaPersonagem() {
         db.getBanco().execSQL("CREATE TABLE IF NOT EXISTS `personagem` (\n" +
                 "\t`id`\tINTEGER NOT NULL UNIQUE,\n" +
@@ -39,12 +44,11 @@ public class PersonagemADO {
     }
 
     public void criarTabelaEspecie() {
-        db.getBanco().execSQL("CREATE TABLE `especie` (\n" +
+        db.getBanco().execSQL("CREATE TABLE IF NOT EXISTS `especie` (\n" +
                 "\t`id`\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
                 "\t`name`\tTEXT NOT NULL,\n" +
-                "\t`personagem`\tINTEGER NOT NULL UNIQUE,\n" +
-                "\tFOREIGN KEY(`personagem`) REFERENCES `personagem`(`id`),\n" +
-                "\tPRIMARY KEY(`id`)\n" +
+                "\t`personagem`\tINTEGER NOT NULL,\n" +
+                "\tFOREIGN KEY(`personagem`) REFERENCES `personagem`(`id`)\n" +
                 ");");
     }
 

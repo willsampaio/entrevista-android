@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         config();
-        //listarPersonagens();
         addItemsFim();
     }
 
@@ -160,4 +159,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
+
 }
