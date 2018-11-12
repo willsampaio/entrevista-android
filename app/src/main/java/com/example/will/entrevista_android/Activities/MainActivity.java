@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity {
 
     private int indexFimP = 0, maxIndexP = 90, indexInicioP = 0, minIndexP = 1, maxListSize = 30, qtdRemove = 20;
-    private int idMin = -1, idMax = -1, addItensQtd = 10;
+    private int idMin = -1, idMax = -1, addItensQtd = 10, firstVisibleItemAux;
     private boolean carregarInicio, carregarFim, carregarFav;
     private ListView listViewPersonagens;
     private ArrayList<Personagem> arrayListPersonagens;
@@ -91,26 +91,39 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(firstVisibleItem == 0){
-                    if(carregarInicio) {
-                        addItensInicioLocal();
-                        carregarInicio = false;
-                        return;
-                    }else {
-                        carregarInicio = true;
-                    }
+                if(firstVisibleItem < firstVisibleItemAux){
+                    addItensInicioLocal();
+                    firstVisibleItemAux = firstVisibleItem;
+                    return;
                 }
 
                 if((firstVisibleItem + visibleItemCount) >= (totalItemCount -3) && totalItemCount != 0)
                 {
-                    if(carregarFim) {
-                        addItensFimLocal();
-                        carregarFim = false;
-                        return;
-                    }else{
-                        carregarFim = true;
-                    }
+                    addItensFimLocal();
+                    firstVisibleItemAux = firstVisibleItem;
+                    return;
                 }
+
+//                if(firstVisibleItem == 0){
+//                    if(carregarInicio) {
+//                        addItensInicioLocal();
+//                        carregarInicio = false;
+//                        return;
+//                    }else {
+//                        carregarInicio = true;
+//                    }
+//                }
+//
+//                if((firstVisibleItem + visibleItemCount) >= (totalItemCount -3) && totalItemCount != 0)
+//                {
+//                    if(carregarFim) {
+//                        addItensFimLocal();
+//                        carregarFim = false;
+//                        return;
+//                    }else{
+//                        carregarFim = true;
+//                    }
+//                }
             }
         });
     }
