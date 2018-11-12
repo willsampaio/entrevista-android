@@ -41,7 +41,7 @@ public class CarregarDadosActivity extends AppCompatActivity {
 
 //        pado.limparBanco();
 
-        ArrayList<Personagem> al = pado.buscarPersonagens(0, 3);
+        ArrayList<Personagem> al = pado.buscarPersonagensMaior(0, 3, false);
         if(al.size() > 0){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

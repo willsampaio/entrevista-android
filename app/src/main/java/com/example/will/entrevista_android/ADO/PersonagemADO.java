@@ -89,7 +89,7 @@ public class PersonagemADO {
     public void favoritarPersonagem(Personagem p) {
         try {
             db.getBanco().execSQL("UPDATE personagem SET fav = ? WHERE id = ?",
-                    new String[]{p.isFav()+"", p.getId()+""});
+                    new String[]{((Boolean)p.isFav()).toString().toLowerCase(), p.getId()+""});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,11 +138,52 @@ public class PersonagemADO {
         }
     }
 
-    public ArrayList<Personagem> buscarPersonagens(int maior_que, int menor_que) {
-        try {
+//    public ArrayList<Personagem> buscarPersonagens(int maior_que, int menor_que) {
+//        try {
+//
+//            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? ORDER BY id;",
+//                    new String[]{maior_que + "", menor_que + ""});
+//
+//            listaPersonagem = getValuesPer(cursor);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            return listaPersonagem;
+//        }
+//    }
 
-            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? ORDER BY id;",
-                    new String[]{maior_que + "", menor_que + ""});
+    public ArrayList<Personagem> buscarPersonagensMaior(int maior_que, int limit, boolean fav) {
+        try {
+            Cursor cursor;
+
+            if(fav) {
+                cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND fav = 'true' ORDER BY id LIMIT ?;",
+                        new String[]{maior_que + "", limit + ""});
+            }else{
+                cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? ORDER BY id LIMIT ?;",
+                        new String[]{maior_que + "", limit + ""});
+            }
+
+            listaPersonagem = getValuesPer(cursor);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return listaPersonagem;
+        }
+    }
+
+    public ArrayList<Personagem> buscarPersonagensMenor(int menor_que, int limit, boolean fav) {
+        try {
+            Cursor cursor;
+
+            if(fav) {
+                cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id < ? AND fav = 'true' ORDER BY id LIMIT ?;",
+                        new String[]{menor_que + "", limit + ""});
+            }else{
+                cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id < ? ORDER BY id LIMIT ?;",
+                        new String[]{menor_que + "", limit + ""});
+            }
 
             listaPersonagem = getValuesPer(cursor);
         } catch (Exception e) {
@@ -152,19 +193,19 @@ public class PersonagemADO {
         }
     }
 
-    public ArrayList<Personagem> buscarPersonagensFavoritos(int maior_que, int menor_que) {
-        try {
-
-            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? AND fav = true ORDER BY id;",
-                    new String[]{maior_que + "", menor_que + ""});
-
-            listaPersonagem = getValuesPer(cursor);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return listaPersonagem;
-        }
-    }
+//    public ArrayList<Personagem> buscarPersonagensFavoritos(int maior_que, int menor_que) {
+//        try {
+//
+//            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? AND fav = 'true' ORDER BY id;",
+//                    new String[]{maior_que + "", menor_que + ""});
+//
+//            listaPersonagem = getValuesPer(cursor);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            return listaPersonagem;
+//        }
+//    }
 
     private ArrayList<String> getValuesEsp(Cursor cursor) {
         ArrayList<String> esps = new ArrayList<String>();

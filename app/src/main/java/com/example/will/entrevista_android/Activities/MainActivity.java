@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int indexFimP = 0, maxIndexP = 90, indexInicioP = 0, minIndexP = 1, maxListSize = 30, qtdRemove = 20;
     private int idMin = -1, idMax = -1, addItensQtd = 10;
-    private boolean carregarInicio, carregarFim, carregarPersonagem;
+    private boolean carregarInicio, carregarFim, carregarFav;
     private ListView listViewPersonagens;
     private ArrayList<Personagem> arrayListPersonagens;
     private PersonagemAdapter personagemAdapter;
@@ -54,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.filtrar_favoritos_menu:
-                Toast.makeText(MainActivity.this, "Filtrar", Toast.LENGTH_SHORT).show();
+                carregarFav = !carregarFav;
+                item.setChecked(carregarFav);
+                recarregarLista();
         }
 
         return super.onOptionsItemSelected(item);
@@ -65,13 +67,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         if(personagemAdapter.positionAux >= 0) {
-            Personagem p = carregarPersonagem(personagemAdapter.idAux);
-            arrayListPersonagens.clear();
-            personagemAdapter.notifyDataSetChanged();
-            idMax = idMin;
-            addItensFimLocal();
-            personagemAdapter.notifyDataSetChanged();
-            personagemAdapter.positionAux = -1;
+            recarregarLista();
         }
     }
 
@@ -119,6 +115,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void recarregarLista(){
+        arrayListPersonagens.clear();
+        personagemAdapter.notifyDataSetChanged();
+        idMax = idMin = -1;
+        addItensFimLocal();
+        personagemAdapter.notifyDataSetChanged();
+        personagemAdapter.positionAux = -1;
+    }
+
     private void limparLixo(char cb){
         switch (cb){
             case 'c':
@@ -144,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addItensInicioLocal(){
-        ArrayList<Personagem> al = buscarPersonagensInicioLocal(addItensQtd);
+        ArrayList<Personagem> al = buscarPersonagensInicioLocal(addItensQtd, carregarFav);
         arrayListPersonagens.addAll(0, al);
         limparLixo('b');
 
@@ -155,14 +160,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addItensFimLocal(){
-        ArrayList<Personagem> al = buscarPersonagensFimLocal(addItensQtd);
+        ArrayList<Personagem> al = buscarPersonagensFimLocal(addItensQtd, carregarFav);
         arrayListPersonagens.addAll(al);
         limparLixo('c');
-        idMax = arrayListPersonagens.get(arrayListPersonagens.size()-1).getId();
+
+        if(arrayListPersonagens.size() > 0) {
+            idMax = arrayListPersonagens.get(arrayListPersonagens.size() - 1).getId();
+        }
+
         personagemAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<Personagem> buscarPersonagensInicioLocal(int value){
+    private ArrayList<Personagem> buscarPersonagensInicioLocal(int value, boolean fav){
         if(idMin == 0){
             return new ArrayList<Personagem>();
         }
@@ -173,17 +182,29 @@ public class MainActivity extends AppCompatActivity {
             aux = -1;
         }
 
-        return pado.buscarPersonagens(aux, idMin);
+//        if(fav){
+//            return pado.buscarPersonagensFavoritos(aux, idMin);
+//        }else {
+//            return pado.buscarPersonagens(aux, idMin);
+//        }
+
+        return pado.buscarPersonagensMenor(idMin, addItensQtd, fav);
     }
 
-    private ArrayList<Personagem> buscarPersonagensFimLocal(int value){
+    private ArrayList<Personagem> buscarPersonagensFimLocal(int value, boolean fav){
         int aux = idMax + value;
 
         if (aux < 0){
             aux = -1;
         }
 
-        return pado.buscarPersonagens(idMax, aux);
+//        if(fav){
+//            return pado.buscarPersonagensFavoritos(idMax, aux);
+//        }else {
+//            return pado.buscarPersonagens(idMax, aux);
+//        }
+
+        return pado.buscarPersonagensMaior(idMax, addItensQtd, fav);
     }
 
 //    private void addItensInicio() {
