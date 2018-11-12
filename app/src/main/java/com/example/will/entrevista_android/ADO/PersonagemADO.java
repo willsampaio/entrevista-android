@@ -86,6 +86,15 @@ public class PersonagemADO {
         }
     }
 
+    public void favoritarPersonagem(Personagem p) {
+        try {
+            db.getBanco().execSQL("UPDATE personagem SET fav = ? WHERE id = ?",
+                    new String[]{p.isFav()+"", p.getId()+""});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private ArrayList<Personagem> getValuesPer(Cursor cursor) {
         listaPersonagem = new ArrayList<Personagem>();
         cursor.moveToFirst();
@@ -115,6 +124,20 @@ public class PersonagemADO {
         try {
 
             Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? ORDER BY id;",
+                    new String[]{maior_que + "", menor_que + ""});
+
+            listaPersonagem = getValuesPer(cursor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return listaPersonagem;
+        }
+    }
+
+    public ArrayList<Personagem> buscarPersonagensFavoritos(int maior_que, int menor_que) {
+        try {
+
+            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? AND fav = true ORDER BY id;",
                     new String[]{maior_que + "", menor_que + ""});
 
             listaPersonagem = getValuesPer(cursor);

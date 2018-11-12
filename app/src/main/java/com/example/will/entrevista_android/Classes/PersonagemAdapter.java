@@ -1,6 +1,7 @@
 package com.example.will.entrevista_android.Classes;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.will.entrevista_android.ADO.PersonagemADO;
+import com.example.will.entrevista_android.Activities.PersonagemActivity;
 import com.example.will.entrevista_android.R;
 
 import java.util.List;
@@ -49,9 +52,56 @@ public class PersonagemAdapter extends BaseAdapter {
         }else
             viewHolder = (ViewHolder) convertView.getTag();
 
-        Personagem p = (Personagem) getItem(position);
+        final Personagem p = (Personagem) getItem(position);
         viewHolder.setValues(p);
+
+        viewHolder.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarPersonagem(p);
+            }
+        });
+
+        viewHolder.tvInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarPersonagem(p);
+            }
+        });
+
+        viewHolder.ivFavo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favoritarPersonagem(p);
+            }
+        });
+
         return convertView;
+    }
+
+    private void mostrarPersonagem(Personagem p){
+        Intent intent = new Intent(activity, PersonagemActivity.class);
+        intent.putExtra("id", p.getId());
+        intent.putExtra("name", p.getName());
+        intent.putExtra("height", p.getHeight());
+        intent.putExtra("gender", p.getGender());
+        intent.putExtra("mass", p.getMass());
+        intent.putExtra("fav", p.isFav());
+        activity.startActivity(intent);
+    }
+
+    private void favoritarPersonagem(Personagem p){
+        if(p.isFav()){
+            p.setFav(false);
+            viewHolder.ivFavo.setImageResource(R.drawable.btn_star_big_off);
+        }else{
+            p.setFav(true);
+            viewHolder.ivFavo.setImageResource(R.drawable.btn_star_big_on);
+        }
+
+        PersonagemADO pado = new PersonagemADO(activity);
+        pado.favoritarPersonagem(p);
+        notifyDataSetChanged();
     }
 
 
