@@ -69,11 +69,11 @@ public class PersonagemADO {
     public void atualizarPersonagem(Personagem p) {
         try {
             db.getBanco().execSQL("UPDATE personagem SET name = ?, height = ?, mass = ?, hair_color = ?, " +
-                            "skin_color = ?, eye_color = ?, birth_year = ?, gender = ? WHERE id = ?",
+                            "skin_color = ?, eye_color = ?, birth_year = ?, gender = ?, homeworld = ?, fav = ? WHERE id = ?",
                     new String[]{p.getName(), p.getHeight(), p.getMass(), p.getHair_color(),
-                            p.getSkin_color(), p.getEye_color(), p.getBirth_year(), p.getGender(), p.getHomeworld(), p.getId() + ""});
+                            p.getSkin_color(), p.getEye_color(), p.getBirth_year(), p.getGender(), p.getHomeworld(), String.valueOf(p.isFav()).toLowerCase(), p.getId() + ""});
 
-            db.getBanco().execSQL("DELETE FROM personagem WHERE id = ?",
+            db.getBanco().execSQL("DELETE FROM especie WHERE personagem = ?",
                     new String[]{"" + p.getId()});
 
             for (String s : p.getSpecies()) {
@@ -210,11 +210,13 @@ public class PersonagemADO {
     private ArrayList<String> getValuesEsp(Cursor cursor) {
         ArrayList<String> esps = new ArrayList<String>();
         cursor.moveToFirst();
-        while (cursor != null) {
+        int i = 0;
+        while (cursor != null && i < cursor.getCount()) {
             String s = "";
             s = cursor.getString(cursor.getColumnIndex("name"));
             esps.add(s);
             cursor.moveToNext();
+            i++;
         }
         return esps;
     }

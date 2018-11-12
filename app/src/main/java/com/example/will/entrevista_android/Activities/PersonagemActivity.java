@@ -1,6 +1,7 @@
 package com.example.will.entrevista_android.Activities;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +25,7 @@ public class PersonagemActivity extends AppCompatActivity {
             tvEyeColor, tvBirthYear, tvGender, tvHomeworld, tvSpecies;
     private Menu menu;
     private Personagem personagem;
+    private PersonagemADO pado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,8 @@ public class PersonagemActivity extends AppCompatActivity {
         tvHomeworld = findViewById(R.id.textViewHomeworld);
         tvSpecies = findViewById(R.id.textViewSpecies);
 
+        pado = new PersonagemADO(getApplicationContext());
+
         Intent it = getIntent();
         int id = it.getIntExtra("id", -1);
         String name = it.getStringExtra("name");
@@ -88,17 +92,17 @@ public class PersonagemActivity extends AppCompatActivity {
         String mass = it.getStringExtra("mass");
         boolean fav = it.getBooleanExtra("fav", false);
 
-        personagem = new Personagem();
-        personagem.setId(id);
-        personagem.setName(name);
-        personagem.setHeight(height);
-        personagem.setGender(gender);
-        personagem.setMass(mass);
-        personagem.setFav(fav);
+//        personagem = new Personagem();
+//        personagem.setId(id);
+//        personagem.setName(name);
+//        personagem.setHeight(height);
+//        personagem.setGender(gender);
+//        personagem.setMass(mass);
+//        personagem.setFav(fav);
 
+        personagem = pado.buscarPersonagemID(id);
         mostrarDados(personagem);
-
-        //personagem = JsonPersonagem.getPersonagemCompleto(getResources().getString(R.string.url) + id);
+        carrecarDadosSecundarios();
     }
 
     private void setTitleMenu(){
@@ -139,5 +143,35 @@ public class PersonagemActivity extends AppCompatActivity {
 
         PersonagemADO pado = new PersonagemADO(this);
         pado.favoritarPersonagem(p);
+    }
+
+    private void carrecarDadosSecundarios(){
+        final Handler h = new Handler();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean fav = personagem.isFav();
+                    personagem = JsonPersonagem.getPersonagemCompleto(getResources().getString(R.string.url) + personagem.getId());
+                    personagem.setFav(fav);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mostrarDados(personagem);
+                        pado.atualizarPersonagem(personagem);
+                    }
+                });
+            }
+        });
+
+        t.start();
     }
 }

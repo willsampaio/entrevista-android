@@ -184,40 +184,16 @@ public class MainActivity extends AppCompatActivity {
         personagemAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<Personagem> buscarPersonagensInicioLocal(int value, boolean fav){
+    private ArrayList<Personagem> buscarPersonagensInicioLocal(int limit, boolean fav){
         if(idMin == 0){
             return new ArrayList<Personagem>();
         }
 
-        int aux = idMin - value -1;
-
-        if (aux < 0){
-            aux = -1;
-        }
-
-//        if(fav){
-//            return pado.buscarPersonagensFavoritos(aux, idMin);
-//        }else {
-//            return pado.buscarPersonagens(aux, idMin);
-//        }
-
-        return pado.buscarPersonagensMenor(idMin, addItensQtd, fav);
+        return pado.buscarPersonagensMenor(idMin, limit, fav);
     }
 
-    private ArrayList<Personagem> buscarPersonagensFimLocal(int value, boolean fav){
-        int aux = idMax + value;
-
-        if (aux < 0){
-            aux = -1;
-        }
-
-//        if(fav){
-//            return pado.buscarPersonagensFavoritos(idMax, aux);
-//        }else {
-//            return pado.buscarPersonagens(idMax, aux);
-//        }
-
-        return pado.buscarPersonagensMaior(idMax, addItensQtd, fav);
+    private ArrayList<Personagem> buscarPersonagensFimLocal(int limit, boolean fav){
+        return pado.buscarPersonagensMaior(idMax, limit, fav);
     }
 
 //    private void addItensInicio() {
