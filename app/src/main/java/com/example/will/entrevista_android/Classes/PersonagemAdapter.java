@@ -21,6 +21,7 @@ public class PersonagemAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater layoutInflater;
     private ViewHolder viewHolder;
+    public int idAux, positionAux = -1;
 
     public PersonagemAdapter(List<Personagem> personagensList, Activity activity) {
         this.personagensList = personagensList;
@@ -76,6 +77,9 @@ public class PersonagemAdapter extends BaseAdapter {
             }
         });
 
+        idAux = p.getId();
+        positionAux = position;
+
         return convertView;
     }
 
@@ -129,6 +133,8 @@ public class PersonagemAdapter extends BaseAdapter {
             }else {
                 ivFavo.setImageResource(R.drawable.btn_star_big_off);
             }
+
+            notifyDataSetChanged();
         }
     }
 

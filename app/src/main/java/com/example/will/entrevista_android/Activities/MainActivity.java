@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int indexFimP = 0, maxIndexP = 90, indexInicioP = 0, minIndexP = 1, maxListSize = 30, qtdRemove = 20;
     private int idMin = -1, idMax = -1, addItensQtd = 10;
-    private boolean carregarInicio, carregarFim;
+    private boolean carregarInicio, carregarFim, carregarPersonagem;
     private ListView listViewPersonagens;
     private ArrayList<Personagem> arrayListPersonagens;
     private PersonagemAdapter personagemAdapter;
@@ -60,6 +60,21 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(personagemAdapter.positionAux >= 0) {
+            Personagem p = carregarPersonagem(personagemAdapter.idAux);
+            arrayListPersonagens.clear();
+            personagemAdapter.notifyDataSetChanged();
+            idMax = idMin;
+            addItensFimLocal();
+            personagemAdapter.notifyDataSetChanged();
+            personagemAdapter.positionAux = -1;
+        }
+    }
+
     private void config() {
         arrayListPersonagens = new ArrayList<Personagem>();
         listViewPersonagens = (ListView) findViewById(R.id.listViewPersonagens);
@@ -75,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if(arrayListPersonagens.size() == 0) {
+                    return;
+                }
 
                 if(firstVisibleItem == 0){
                     if(carregarInicio) {
@@ -119,11 +138,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private Personagem carregarPersonagem(int id){
+        Personagem p = pado.buscarPersonagemID(id);
+        return p;
+    }
+
     private void addItensInicioLocal(){
         ArrayList<Personagem> al = buscarPersonagensInicioLocal(addItensQtd);
         arrayListPersonagens.addAll(0, al);
         limparLixo('b');
-        idMin = arrayListPersonagens.get(0).getId();
+
+        if(arrayListPersonagens.size() > 0) {
+            idMin = arrayListPersonagens.get(0).getId();
+        }
         personagemAdapter.notifyDataSetChanged();
     }
 

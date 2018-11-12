@@ -120,6 +120,24 @@ public class PersonagemADO {
         return listaPersonagem;
     }
 
+    public Personagem buscarPersonagemID(int id) {
+        try {
+
+            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id = ?;",
+                    new String[]{id+""});
+
+            listaPersonagem = getValuesPer(cursor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(listaPersonagem != null && listaPersonagem.size() == 1) {
+                return listaPersonagem.get(0);
+            }else{
+                return null;
+            }
+        }
+    }
+
     public ArrayList<Personagem> buscarPersonagens(int maior_que, int menor_que) {
         try {
 

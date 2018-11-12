@@ -3,8 +3,13 @@ package com.example.will.entrevista_android.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Classes.Personagem;
 import com.example.will.entrevista_android.Ferramentas.JsonPersonagem;
 import com.example.will.entrevista_android.R;
@@ -17,7 +22,7 @@ public class PersonagemActivity extends AppCompatActivity {
 
     private TextView tvName, tvHeight, tvMass, tvHairColor, tvSkinColor,
             tvEyeColor, tvBirthYear, tvGender, tvHomeworld, tvSpecies;
-
+    private Menu menu;
     private Personagem personagem;
 
     @Override
@@ -35,7 +40,32 @@ public class PersonagemActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_personagem, menu);
+        this.menu = menu;
+        setTitleMenu();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.favoritar_menu:
+                favoritarPersonagem(personagem);
+                setTitleMenu();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setTitleMenu();
     }
 
     private void config() throws InterruptedException, ExecutionException, JSONException {
@@ -71,6 +101,19 @@ public class PersonagemActivity extends AppCompatActivity {
         //personagem = JsonPersonagem.getPersonagemCompleto(getResources().getString(R.string.url) + id);
     }
 
+    private void setTitleMenu(){
+        if(menu == null){
+            return;
+        }
+
+        MenuItem mi = menu.findItem(R.id.favoritar_menu);
+        if (personagem.isFav()) {
+            mi.setTitle(getResources().getString(R.string.menu_rem_fav));
+        } else {
+            mi.setTitle(getResources().getString(R.string.menu_add_fav));
+        }
+    }
+
     private void mostrarDados(Personagem p){
         tvName.setText(getResources().getString(R.string.tv_name) + p.getName());
         tvHeight.setText(getResources().getString(R.string.tv_height) + p.getHeight());
@@ -87,5 +130,14 @@ public class PersonagemActivity extends AppCompatActivity {
         }
     }
 
+    private void favoritarPersonagem(Personagem p){
+        if(p.isFav()) {
+            p.setFav(false);
+        }else {
+            p.setFav(true);
+        }
 
+        PersonagemADO pado = new PersonagemADO(this);
+        pado.favoritarPersonagem(p);
+    }
 }
