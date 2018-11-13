@@ -103,27 +103,6 @@ public class MainActivity extends AppCompatActivity {
                     firstVisibleItemAux = firstVisibleItem;
                     return;
                 }
-
-//                if(firstVisibleItem == 0){
-//                    if(carregarInicio) {
-//                        addItensInicioLocal();
-//                        carregarInicio = false;
-//                        return;
-//                    }else {
-//                        carregarInicio = true;
-//                    }
-//                }
-//
-//                if((firstVisibleItem + visibleItemCount) >= (totalItemCount -3) && totalItemCount != 0)
-//                {
-//                    if(carregarFim) {
-//                        addItensFimLocal();
-//                        carregarFim = false;
-//                        return;
-//                    }else{
-//                        carregarFim = true;
-//                    }
-//                }
             }
         });
     }

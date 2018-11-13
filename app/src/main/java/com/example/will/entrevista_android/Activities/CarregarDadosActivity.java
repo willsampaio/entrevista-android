@@ -1,17 +1,13 @@
 package com.example.will.entrevista_android.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Classes.Personagem;
@@ -27,7 +23,8 @@ public class CarregarDadosActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private Button button;
-    private final int total = 87;
+    private TextView textView;
+    private final int total = 87, maxId = 90;
     private Handler handler = new Handler();
 
     @Override
@@ -41,8 +38,8 @@ public class CarregarDadosActivity extends AppCompatActivity {
 
 //        pado.limparBanco();
 
-        ArrayList<Personagem> al = pado.buscarPersonagensMaior(0, 3, false);
-        if(al.size() > 0){
+        ArrayList<Personagem> al = pado.buscarPersonagensMaior(0, 90, false);
+        if(al.size() == total){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -58,6 +55,7 @@ public class CarregarDadosActivity extends AppCompatActivity {
     private void config(){
         progressBar = findViewById(R.id.progressBar);
         button = findViewById(R.id.button);
+        textView = findViewById(R.id.textViewLoading);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,12 +93,18 @@ public class CarregarDadosActivity extends AppCompatActivity {
 
                     final int finalPercent = percent;
                     final int finalCount = count;
+                    final int finalId = id;
                     handler.post(new Runnable() {
                         public void run() {
                             progressBar.setProgress(finalPercent);
 
                             if(finalCount == total){
                                 button.setVisibility(View.VISIBLE);
+                            }
+
+                            if((finalId > maxId) && (finalCount != total)){
+                                error();
+                                return;
                             }
                         }
                     });
@@ -109,6 +113,10 @@ public class CarregarDadosActivity extends AppCompatActivity {
         });
 
         t.start();
+    }
+
+    private void error(){
+        textView.setText(getResources().getString(R.string.error_loading));
     }
 
 }

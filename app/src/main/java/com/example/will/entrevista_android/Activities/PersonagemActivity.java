@@ -27,6 +27,7 @@ public class PersonagemActivity extends AppCompatActivity {
     private Menu menu;
     private Personagem personagem;
     private PersonagemADO pado;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class PersonagemActivity extends AppCompatActivity {
 
         try {
             config();
-            mostrarDados(personagem);
+//            mostrarDados(personagem);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -60,6 +61,7 @@ public class PersonagemActivity extends AppCompatActivity {
             case R.id.favoritar_menu:
                 favoritarPersonagem(personagem);
                 setTitleMenu();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -84,31 +86,41 @@ public class PersonagemActivity extends AppCompatActivity {
         tvSpecies = findViewById(R.id.textViewSpecies);
 
         pado = new PersonagemADO(getApplicationContext());
+        intent = getIntent();
 
-        Intent it = getIntent();
-        int id = it.getIntExtra("id", -1);
-        String name = it.getStringExtra("name");
-        String height = it.getStringExtra("height");
-        String gender = it.getStringExtra("gender");
-        String mass = it.getStringExtra("mass");
-        boolean fav = it.getBooleanExtra("fav", false);
+        personagem = getPersonagemIntent();
 
-//        personagem = new Personagem();
-//        personagem.setId(id);
-//        personagem.setName(name);
-//        personagem.setHeight(height);
-//        personagem.setGender(gender);
-//        personagem.setMass(mass);
-//        personagem.setFav(fav);
+        //personagem = pado.buscarPersonagemID(id);
 
-        personagem = pado.buscarPersonagemID(id);
         mostrarDados(personagem);
         carrecarDadosSecundarios();
+    }
+
+    private Personagem getPersonagemIntent(){
+        int id = intent.getIntExtra("id", -1);
+        String name = intent.getStringExtra("name");
+        String height = intent.getStringExtra("height");
+        String gender = intent.getStringExtra("gender");
+        String mass = intent.getStringExtra("mass");
+        boolean fav = intent.getBooleanExtra("fav", false);
+
+        Personagem p = new Personagem();
+        p.setId(id);
+        p.setName(name);
+        p.setHeight(height);
+        p.setGender(gender);
+        p.setMass(mass);
+        p.setFav(fav);
+        return p;
     }
 
     private void setTitleMenu(){
         if(menu == null){
             return;
+        }
+
+        if(personagem == null){
+            personagem = getPersonagemIntent();
         }
 
         MenuItem mi = menu.findItem(R.id.favoritar_menu);
@@ -164,7 +176,11 @@ public class PersonagemActivity extends AppCompatActivity {
                 try {
                     boolean fav = personagem.isFav();
                     personagem = JsonPersonagem.getPersonagemCompleto(getResources().getString(R.string.url) + personagem.getId());
-                    personagem.setFav(fav);
+
+                    if(personagem != null){
+                        personagem.setFav(fav);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
@@ -176,13 +192,21 @@ public class PersonagemActivity extends AppCompatActivity {
                 h.post(new Runnable() {
                     @Override
                     public void run() {
-                        mostrarDados(personagem);
-                        pado.atualizarPersonagem(personagem);
+                        if(personagem != null) {
+                            mostrarDados(personagem);
+                            pado.atualizarPersonagem(personagem);
+                        }else {
+                            error();
+                        }
                     }
                 });
             }
         });
-
         t.start();
+    }
+
+    private void error(){
+        personagem = getPersonagemIntent();
+        Toast.makeText(this, getResources().getString(R.string.error_loading), Toast.LENGTH_SHORT).show();
     }
 }

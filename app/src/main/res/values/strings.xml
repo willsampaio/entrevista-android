@@ -15,4 +15,8 @@
     <string name="menu_filtrar">Filtrar Favoritos</string>
     <string name="menu_add_fav">Tornar Favorito</string>
     <string name="menu_rem_fav">Remover Favorito</string>
+
+
+    <string name="error_loading">Error loading data.</string>
+    <string name="error_post_request">Error in post request.</string>
 </resources>

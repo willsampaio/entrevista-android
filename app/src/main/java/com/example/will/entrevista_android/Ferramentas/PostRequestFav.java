@@ -5,6 +5,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.example.will.entrevista_android.ADO.PersonagemADO;
+import com.example.will.entrevista_android.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,8 +16,15 @@ public class PostRequestFav {
 
     public static String favoritarExterno(int id, Context context) throws ExecutionException, InterruptedException, JSONException {
         String json = new PostRequest().execute(id).get();
+        JSONObject j = null;
 
-        JSONObject j = new JSONObject(json);
+        if(json != null) {
+            j = new JSONObject(json);
+        }else{
+            //showMessage("",context.getResources().getString(R.string.error_post_request), context);
+            Toast.makeText(context, context.getResources().getString(R.string.error_post_request), Toast.LENGTH_SHORT).show();
+            return null;
+        }
 
         String message = "", title = "";
 
