@@ -97,12 +97,12 @@ public class PersonagemActivity extends AppCompatActivity {
     }
 
     private Personagem getPersonagemIntent(){
-        int id = intent.getIntExtra("id", -1);
-        String name = intent.getStringExtra("name");
-        String height = intent.getStringExtra("height");
-        String gender = intent.getStringExtra("gender");
-        String mass = intent.getStringExtra("mass");
-        boolean fav = intent.getBooleanExtra("fav", false);
+        int id = intent.getIntExtra(getResources().getString(R.string.it_id), -1);
+        String name = intent.getStringExtra(getResources().getString(R.string.it_name));
+        String height = intent.getStringExtra(getResources().getString(R.string.it_height));
+        String gender = intent.getStringExtra(getResources().getString(R.string.it_gender));
+        String mass = intent.getStringExtra(getResources().getString(R.string.it_mass));
+        boolean fav = intent.getBooleanExtra(getResources().getString(R.string.it_fav), false);
 
         Personagem p = new Personagem();
         p.setId(id);
@@ -175,7 +175,7 @@ public class PersonagemActivity extends AppCompatActivity {
             public void run() {
                 try {
                     boolean fav = personagem.isFav();
-                    personagem = JsonPersonagem.getPersonagemCompleto(getResources().getString(R.string.url) + personagem.getId());
+                    personagem = JsonPersonagem.getPersonagemCompleto(getResources().getString(R.string.url) + personagem.getId(), getApplicationContext());
 
                     if(personagem != null){
                         personagem.setFav(fav);

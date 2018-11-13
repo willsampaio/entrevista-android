@@ -32,13 +32,13 @@ public class PostRequestFav {
         String message = "", title = "";
 
         try {
-            title = j.getString("status");
-            message = j.getString("message");
+            title = j.getString(context.getResources().getString(R.string.json_req_status));
+            message = j.getString(context.getResources().getString(R.string.json_req_message));
             showMessage(title, message, context);
             return true;
         }catch (JSONException e){
-            title = j.getString("error");
-            message = j.getString("error_message");
+            title = j.getString(context.getResources().getString(R.string.json_req_erro));
+            message = j.getString(context.getResources().getString(R.string.json_req_erro_message));
             showMessage(title, message, context);
             PersonagemADO pado = new PersonagemADO(context);
             pado.inserirFavNaoEnviadoId(id);
@@ -58,7 +58,7 @@ public class PostRequestFav {
         ArrayList<Integer> lista = pado.buscarFavNaoEnviados();
 
         if (lista.size() > 0) {
-            Toast.makeText(context, "Sending old favorites.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getResources().getString(R.string.send_fav), Toast.LENGTH_SHORT).show();
         }
 
         for (int i = 0; i < lista.size(); i++) {

@@ -12,11 +12,36 @@
     <string name="tv_species">Species:\u0020</string>
     <string name="url">https://swapi.co/api/people/</string>
 
+    <string name="it_id">id</string>
+    <string name="it_name">name</string>
+    <string name="it_height">height</string>
+    <string name="it_gender">gender</string>
+    <string name="it_mass">mass</string>
+    <string name="it_fav">fav</string>
+
+    <string name="json_name">name</string>
+    <string name="json_height">height</string>
+    <string name="json_mass">mass</string>
+    <string name="json_hair_color">hair_color</string>
+    <string name="json_skin_color">skin_color</string>
+    <string name="json_eye_color">eye_color</string>
+    <string name="json_birth_year">birth_year</string>
+    <string name="json_gender">gender</string>
+    <string name="json_homeworld">homeworld</string>
+    <string name="json_species">species</string>
+    <string name="json_url">url</string>
+
     <string name="menu_filtrar">Filtrar Favoritos</string>
     <string name="menu_add_fav">Tornar Favorito</string>
     <string name="menu_rem_fav">Remover Favorito</string>
 
-
     <string name="error_loading">Error loading data.</string>
     <string name="error_post_request">Error in post request.</string>
+    <string name="send_fav">Sending old favorites.</string>
+
+    <string name="json_req_erro">error</string>
+    <string name="json_req_erro_message">error_message</string>
+    <string name="json_req_status">status</string>
+    <string name="json_req_message">message</string>
+
 </resources>

@@ -143,20 +143,6 @@ public class PersonagemADO {
         }
     }
 
-//    public ArrayList<Personagem> buscarPersonagens(int maior_que, int menor_que) {
-//        try {
-//
-//            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? ORDER BY id;",
-//                    new String[]{maior_que + "", menor_que + ""});
-//
-//            listaPersonagem = getValuesPer(cursor);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            return listaPersonagem;
-//        }
-//    }
-
     public ArrayList<Personagem> buscarPersonagensMaior(int maior_que, int limit, boolean fav) {
         try {
             Cursor cursor;
@@ -197,20 +183,6 @@ public class PersonagemADO {
             return listaPersonagem;
         }
     }
-
-//    public ArrayList<Personagem> buscarPersonagensFavoritos(int maior_que, int menor_que) {
-//        try {
-//
-//            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM personagem WHERE id > ? AND id < ? AND fav = 'true' ORDER BY id;",
-//                    new String[]{maior_que + "", menor_que + ""});
-//
-//            listaPersonagem = getValuesPer(cursor);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            return listaPersonagem;
-//        }
-//    }
 
     private ArrayList<String> getValuesEsp(Cursor cursor) {
         ArrayList<String> esps = new ArrayList<String>();

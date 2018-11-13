@@ -62,6 +62,7 @@ public class CarregarDadosActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -74,7 +75,7 @@ public class CarregarDadosActivity extends AppCompatActivity {
                 while (count < total) {
                     Personagem p = null;
                     try {
-                        p = JsonPersonagem.getPersonagemSimples("https://swapi.co/api/people/" + id++ + "/");
+                        p = JsonPersonagem.getPersonagemSimples(getResources().getString(R.string.url) + id++, getApplicationContext());
 
                         if(p != null) {
                             pado.inserirPersonagem(p);

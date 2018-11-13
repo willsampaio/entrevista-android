@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Activities.MainActivity;
 import com.example.will.entrevista_android.Activities.PersonagemActivity;
-import com.example.will.entrevista_android.Ferramentas.PostRequest;
 import com.example.will.entrevista_android.Ferramentas.PostRequestFav;
 import com.example.will.entrevista_android.R;
 
@@ -92,12 +90,12 @@ public class PersonagemAdapter extends BaseAdapter {
 
     private void mostrarPersonagem(Personagem p){
         Intent intent = new Intent(activity, PersonagemActivity.class);
-        intent.putExtra("id", p.getId());
-        intent.putExtra("name", p.getName());
-        intent.putExtra("height", p.getHeight());
-        intent.putExtra("gender", p.getGender());
-        intent.putExtra("mass", p.getMass());
-        intent.putExtra("fav", p.isFav());
+        intent.putExtra(activity.getResources().getString(R.string.it_id), p.getId());
+        intent.putExtra(activity.getResources().getString(R.string.it_name), p.getName());
+        intent.putExtra(activity.getResources().getString(R.string.it_height), p.getHeight());
+        intent.putExtra(activity.getResources().getString(R.string.it_gender), p.getGender());
+        intent.putExtra(activity.getResources().getString(R.string.it_mass), p.getMass());
+        intent.putExtra(activity.getResources().getString(R.string.it_fav), p.isFav());
         activity.startActivity(intent);
     }
 
@@ -149,7 +147,9 @@ public class PersonagemAdapter extends BaseAdapter {
 
         public void setValues(Personagem p) {
             tvName.setText(p.getName());
-            tvInfo.setText("Gender: " + p.getGender() + "  Height: " + p.getHeight() + "  Mass: " + p.getMass());
+            tvInfo.setText(activity.getResources().getString(R.string.tv_gender) + p.getGender() + "  " +
+                    activity.getResources().getString(R.string.tv_height) + p.getHeight() + "  "
+                    + activity.getResources().getString(R.string.tv_mass) + p.getMass());
 
             if(p.isFav()){
                 ivFavo.setImageResource(R.drawable.btn_star_big_on);

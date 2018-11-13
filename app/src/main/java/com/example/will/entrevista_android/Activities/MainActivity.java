@@ -1,21 +1,16 @@
 package com.example.will.entrevista_android.Activities;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Classes.Personagem;
 import com.example.will.entrevista_android.Classes.PersonagemAdapter;
-import com.example.will.entrevista_android.Ferramentas.JsonPersonagem;
 import com.example.will.entrevista_android.Ferramentas.PostRequestFav;
 import com.example.will.entrevista_android.R;
 
@@ -26,8 +21,8 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int indexFimP = 0, maxIndexP = 90, indexInicioP = 0, minIndexP = 1, maxListSize = 30, qtdRemove = 20;
-    private int idMin = -1, idMax = -1, addItensQtd = 10, firstVisibleItemAux;
+    private int maxListSize = 30, qtdRemove = 20, idMin = -1,
+            idMax = -1, qtdAdd = 10, firstVisibleItemAux;
     public static boolean carregarFav;
     private ListView listViewPersonagens;
     private ArrayList<Personagem> arrayListPersonagens;
@@ -147,13 +142,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Personagem carregarPersonagem(int id){
-        Personagem p = pado.buscarPersonagemID(id);
-        return p;
-    }
-
     private void addItensInicioLocal(){
-        ArrayList<Personagem> al = buscarPersonagensInicioLocal(addItensQtd, carregarFav);
+        ArrayList<Personagem> al = buscarPersonagensInicioLocal(qtdAdd, carregarFav);
         arrayListPersonagens.addAll(0, al);
         limparLixo('b');
 
@@ -164,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addItensFimLocal(){
-        ArrayList<Personagem> al = buscarPersonagensFimLocal(addItensQtd, carregarFav);
+        ArrayList<Personagem> al = buscarPersonagensFimLocal(qtdAdd, carregarFav);
         arrayListPersonagens.addAll(al);
         limparLixo('c');
 
@@ -186,84 +176,5 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Personagem> buscarPersonagensFimLocal(int limit, boolean fav){
         return pado.buscarPersonagensMaior(idMax, limit, fav);
     }
-
-//    private void addItensInicio() {
-//
-//        if(indexInicioP <= minIndexP){
-//            return;
-//        }
-//
-//        limparLixo('b');
-//
-//        arrayListPersonagens.addAll(0, buscarPersonagensInicio(10));
-//        indexInicioP = arrayListPersonagens.get(0).getId();
-//        personagemAdapter.notifyDataSetChanged();
-//    }
-
-//    private void addItensFim() {
-//
-//        if(indexFimP >= maxIndexP){
-//            return;
-//        }
-//
-//        limparLixo('c');
-//
-//        arrayListPersonagens.addAll(buscarPersonagensFim(10));
-//        indexInicioP = arrayListPersonagens.get(0).getId();
-//        indexFimP = arrayListPersonagens.get(arrayListPersonagens.size() -1).getId();
-//        personagemAdapter.notifyDataSetChanged();
-//    }
-
-//    private ArrayList<Personagem> buscarPersonagensFim(int max) {
-//        try{
-//            ArrayList<Personagem> list = new ArrayList<>();
-//            max += indexFimP;
-//
-//            for (; indexFimP < max; indexFimP++){
-//                Personagem p = JsonPersonagem.getPersonagemSimples("https://swapi.co/api/people/" + indexFimP + "/");
-//
-//                if(p != null) {
-//                    list.add(p);
-//                }
-//            }
-//
-//            return list;
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
-//    private ArrayList<Personagem> buscarPersonagensInicio(int min) {
-//        try{
-//            ArrayList<Personagem> list = new ArrayList<>();
-//            min = indexInicioP - min;
-//
-//            if(min < minIndexP){
-//                min = minIndexP;
-//            }
-//
-//            for (; min < indexInicioP; min++){
-//                Personagem p = JsonPersonagem.getPersonagemSimples("https://swapi.co/api/people/" + min + "/");
-//
-//                if(p != null) {
-//                    list.add(p);
-//                }
-//            }
-//
-//            return list;
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
 }
