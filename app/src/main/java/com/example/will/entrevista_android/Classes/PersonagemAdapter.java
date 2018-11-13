@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.will.entrevista_android.ADO.PersonagemADO;
+import com.example.will.entrevista_android.Activities.MainActivity;
 import com.example.will.entrevista_android.Activities.PersonagemActivity;
 import com.example.will.entrevista_android.Ferramentas.PostRequest;
 import com.example.will.entrevista_android.Ferramentas.PostRequestFav;
@@ -104,6 +105,12 @@ public class PersonagemAdapter extends BaseAdapter {
         if(p.isFav()){
             p.setFav(false);
             viewHolder.ivFavo.setImageResource(R.drawable.btn_star_big_off);
+
+            if(MainActivity.carregarFav) {
+                personagensList.remove(p);
+                notifyDataSetChanged();
+            }
+
         }else{
             p.setFav(true);
             viewHolder.ivFavo.setImageResource(R.drawable.btn_star_big_on);

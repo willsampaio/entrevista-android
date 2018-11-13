@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int indexFimP = 0, maxIndexP = 90, indexInicioP = 0, minIndexP = 1, maxListSize = 30, qtdRemove = 20;
     private int idMin = -1, idMax = -1, addItensQtd = 10, firstVisibleItemAux;
-    private boolean carregarInicio, carregarFim, carregarFav;
+    public static boolean carregarFav;
     private ListView listViewPersonagens;
     private ArrayList<Personagem> arrayListPersonagens;
     private PersonagemAdapter personagemAdapter;
