@@ -25,8 +25,12 @@ public class PostRequest extends AsyncTask<Integer, Void, String> {
             final URL url = new URL("http://private-782d3-starwarsfavorites.apiary-mock.com/favorite/" + integers[0]);
             final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-type", "application/json");
+//            connection.setRequestProperty("Accept", "application/json");
+//            connection.setRequestProperty("Content-type", "application/json");
+
+            if(integers.length > 1 && integers[1] == 1){
+                connection.setRequestProperty("status", "400");
+            }
 
             connection.setRequestMethod("POST");
             connection.setDoInput(true);

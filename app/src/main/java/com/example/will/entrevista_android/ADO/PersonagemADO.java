@@ -19,6 +19,7 @@ public class PersonagemADO {
         db = new BancoDados(context);
         criarTabelaPersonagem();
         criarTabelaEspecie();
+        criarTabelaFavNaoEnviado();
     }
 
     public void limparBanco(){
@@ -26,7 +27,6 @@ public class PersonagemADO {
         db.getBanco().execSQL("DROP TABLE IF EXISTS personagem;");
         criarTabelaPersonagem();
         criarTabelaEspecie();
-        criarTabelaFavNaoEnviado();
     }
 
     public void criarTabelaPersonagem() {
@@ -95,15 +95,6 @@ public class PersonagemADO {
         try {
             db.getBanco().execSQL("UPDATE personagem SET fav = ? WHERE id = ?",
                     new String[]{((Boolean)p.isFav()).toString().toLowerCase(), p.getId()+""});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void inserirFavNaoEnviadoId(int id) {
-        try {
-            db.getBanco().execSQL("INSERT INTO fav_nao_enviado (id) VALUES (?)",
-                    new String[]{id+""});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -248,6 +239,46 @@ public class PersonagemADO {
         return null;
     }
 
+    public void inserirFavNaoEnviadoId(int id) {
+        try {
+            db.getBanco().execSQL("INSERT INTO fav_nao_enviado (id) VALUES (?)",
+                    new String[]{id+""});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deletarFavNaoEnviadoId(int id) {
+        try {
+            db.getBanco().execSQL("DELETE FROM fav_nao_enviado WHERE id = ?",
+                    new String[]{id+""});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Integer> buscarFavNaoEnviados(){
+        try {
+            Cursor cursor = db.getBanco().rawQuery("SELECT * FROM fav_nao_enviado ORDER BY id;",
+                    null);
+
+            ArrayList<Integer> ids = new ArrayList<Integer>();
+            cursor.moveToFirst();
+            int i = 0;
+            while (cursor != null && i < cursor.getCount()) {
+                int id;
+                id = cursor.getInt(cursor.getColumnIndex("id"));
+                ids.add(id);
+                cursor.moveToNext();
+                i++;
+            }
+
+            return ids;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<Integer>();
+        }
+    }
 
 
 }

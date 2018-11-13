@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Classes.Personagem;
 import com.example.will.entrevista_android.Ferramentas.JsonPersonagem;
+import com.example.will.entrevista_android.Ferramentas.PostRequestFav;
 import com.example.will.entrevista_android.R;
 
 import org.json.JSONException;
@@ -35,7 +36,6 @@ public class CarregarDadosActivity extends AppCompatActivity {
         config();
 
         PersonagemADO pado = new PersonagemADO(this);
-
 //        pado.limparBanco();
 
         ArrayList<Personagem> al = pado.buscarPersonagensMaior(0, 90, false);

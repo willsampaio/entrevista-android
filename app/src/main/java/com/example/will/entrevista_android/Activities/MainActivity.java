@@ -16,6 +16,7 @@ import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Classes.Personagem;
 import com.example.will.entrevista_android.Classes.PersonagemAdapter;
 import com.example.will.entrevista_android.Ferramentas.JsonPersonagem;
+import com.example.will.entrevista_android.Ferramentas.PostRequestFav;
 import com.example.will.entrevista_android.R;
 
 import org.json.JSONException;
@@ -40,6 +41,17 @@ public class MainActivity extends AppCompatActivity {
 
         config();
         addItensFimLocal();
+
+        try {
+            PostRequestFav.favoritarExternoLista(this);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
