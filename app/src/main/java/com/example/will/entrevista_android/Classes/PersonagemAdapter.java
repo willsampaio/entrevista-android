@@ -8,12 +8,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Activities.PersonagemActivity;
+import com.example.will.entrevista_android.Ferramentas.PostRequest;
+import com.example.will.entrevista_android.Ferramentas.PostRequestFav;
 import com.example.will.entrevista_android.R;
 
+import org.json.JSONException;
+
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class PersonagemAdapter extends BaseAdapter {
 
@@ -101,6 +107,16 @@ public class PersonagemAdapter extends BaseAdapter {
         }else{
             p.setFav(true);
             viewHolder.ivFavo.setImageResource(R.drawable.btn_star_big_on);
+
+            try {
+                PostRequestFav.favoritarExterno(p.getId(), activity);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         PersonagemADO pado = new PersonagemADO(activity);

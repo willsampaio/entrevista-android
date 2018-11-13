@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.will.entrevista_android.ADO.PersonagemADO;
 import com.example.will.entrevista_android.Classes.Personagem;
 import com.example.will.entrevista_android.Ferramentas.JsonPersonagem;
+import com.example.will.entrevista_android.Ferramentas.PostRequestFav;
 import com.example.will.entrevista_android.R;
 
 import org.json.JSONException;
@@ -139,6 +140,16 @@ public class PersonagemActivity extends AppCompatActivity {
             p.setFav(false);
         }else {
             p.setFav(true);
+
+            try {
+                PostRequestFav.favoritarExterno(p.getId(), this);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         PersonagemADO pado = new PersonagemADO(this);

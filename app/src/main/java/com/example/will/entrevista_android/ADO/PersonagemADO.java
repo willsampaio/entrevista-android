@@ -26,6 +26,7 @@ public class PersonagemADO {
         db.getBanco().execSQL("DROP TABLE IF EXISTS personagem;");
         criarTabelaPersonagem();
         criarTabelaEspecie();
+        criarTabelaFavNaoEnviado();
     }
 
     public void criarTabelaPersonagem() {
@@ -34,6 +35,10 @@ public class PersonagemADO {
 
     public void criarTabelaEspecie() {
         db.getBanco().execSQL("CREATE TABLE IF NOT EXISTS especie ( id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name TEXT, personagem INTEGER, FOREIGN KEY(personagem) REFERENCES personagem(id));");
+    }
+
+    public void criarTabelaFavNaoEnviado() {
+        db.getBanco().execSQL("CREATE TABLE IF NOT EXISTS fav_nao_enviado (id INTEGER NOT NULL, PRIMARY KEY(id));");
     }
 
     public void inserirPersonagem(Personagem p) {
@@ -90,6 +95,15 @@ public class PersonagemADO {
         try {
             db.getBanco().execSQL("UPDATE personagem SET fav = ? WHERE id = ?",
                     new String[]{((Boolean)p.isFav()).toString().toLowerCase(), p.getId()+""});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void inserirFavNaoEnviadoId(int id) {
+        try {
+            db.getBanco().execSQL("INSERT INTO fav_nao_enviado (id) VALUES (?)",
+                    new String[]{id+""});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,5 +247,7 @@ public class PersonagemADO {
 
         return null;
     }
+
+
 
 }
